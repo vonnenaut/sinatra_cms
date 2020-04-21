@@ -27,10 +27,11 @@ PLATFORMS
 
 DEPENDENCIES
   erubis
-  rack (>= 1.6.12)
-  rack-protection (>= 1.5.5)
   sinatra (~> 1.4.7)
   sinatra-contrib
+
+RUBY VERSION
+   ruby 2.5.8p224
 
 BUNDLED WITH
    1.17.3
