@@ -7,7 +7,7 @@ root = File.expand_path("..", __FILE__)
 
 helpers do
   def load_file(path)    
-    file = File.open(path, 'r')
+    file = File.read(path)
     return file if file
 
     session[:error] = "The specified file was not found."
@@ -23,10 +23,12 @@ get "/" do
   erb :index
 end
 
-get "/:file" do
-  @file_name = params[:file]
+get "/:filename" do
+  @file_name = params[:filename]
   path = root + "/data/#{@file_name}"
-  @file_contents = load_file(path)
+  headers["Content-Type"] = "text/plain"
+  # @file_contents = load_file(path)
+  File.read(path)
 
   erb :file
 end
