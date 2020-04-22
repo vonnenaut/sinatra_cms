@@ -1,6 +1,17 @@
 <!-- views/index.erb -->
+<header>
+  <% if session[:message] %>
+    <div class="flash message">
+      <p><%= session.delete(:message) %></p>
+    </div>
+  <% end %>
+</header>
+
 <ul>
   <% @files.each do |file| %>
-    <li><a href="<%= file %>"><%= file %></a></li>
+    <li>
+      <a href="<%= file %>"><%= file %></a>
+      <a href="<%= file %>/edit">Edit</a>
+    </li>
   <% end %>
 </ul>
