@@ -1,1 +1,13 @@
-new content
+Ruby 2.7
+Released December, 2019
+New Features
+
+    Pattern Matching (experimental)
+    Numbered block parameters (experimental)
+    IRB updates
+
+Methods
+
+    Enumerable#tally
+    Enumerator#produce
+    Arrary#intersection

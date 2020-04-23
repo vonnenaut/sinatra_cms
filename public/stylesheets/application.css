@@ -32,6 +32,18 @@ main > form {
   margin-top: 1.5em;
 }
 
+.file-edit a {
+  padding-right: 0.7em;
+}
+
+.file-link {
+  font-size: 1.2em;
+}
+
+.edit-link {
+  font-size: 0.8em;
+}
+
 .flash {
   max-width: 960px;
   padding: 10px 20px;
