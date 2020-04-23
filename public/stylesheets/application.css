@@ -4,15 +4,16 @@ a {
 }
 
 body {
-  font: normal 20px "PT Sans", Helvetica, Arial, sans-serif;
-  color: #1b517d;
+  font: normal 18px sans-serif;
+  color: #000000;
   background: #ffffff;
+  padding: 2em;
+  margin: 0 auto;
 }
 
 body > header {
   max-width: 1000px;
-  padding: 85px 0 35px 0;
-  margin: 0 auto;
+  padding: 0.3em 0 0.4em 0;
 }
 
 body > header h1 {
@@ -24,8 +25,7 @@ body > header h1 {
 
 main {
   max-width: 1000px;
-  padding: 0 0 40px 0;
-  margin: 0 auto;
+  padding: 2em 0 0.5em 0;
 }
 
 main > form {
@@ -33,7 +33,7 @@ main > form {
 }
 
 .file-edit a {
-  padding-right: 0.7em;
+  padding-right: 1em;
 }
 
 .file-link {
@@ -44,25 +44,9 @@ main > form {
   font-size: 0.8em;
 }
 
-.flash {
+.flash-message {
   max-width: 960px;
   padding: 10px 20px;
-  margin: 20px auto 1.5em auto;
-  color: #3399cc;
-  background: #CBE5F2;
-}
-
-.flash p {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.flash.error {
-  color: #ff6633;
-  background: #FFCFBF;
-}
-
-.flash.success {
-  color: #33cc99;
-  background: #CBF2E5;
+  color: #000000;
+  background: #ffe8a3;
 }

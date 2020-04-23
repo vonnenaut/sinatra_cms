@@ -1,39 +1,13 @@
 <!-- views/index.erb -->
-<!doctype html>
-<html lang="en-US">
-  <head>
-    <title>File-based CMS</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans">
-    <link rel="stylesheet" href="/stylesheets/whitespace-reset.css">
-    <link rel="stylesheet" href="/stylesheets/application.css">
-    <script src="/javascripts/jquery-3.5.0.js"></script>
-    <script src="/javascripts/application.js"></script>
-  </head>
-  <body>
-    <header>
-      <h1>Content Management System</h1>
-    </header>
 
-    <header>
-      <% if session[:message] %>
-        <div class="flash message">
-          <p><%= session.delete(:message) %></p>
-        </div>
-      <% end %>
-    </header>
-
-    <table class="file-edit">
-      <% @files.each do |file| %>
-        <tr>
-          <td>
-            <a class="file-link" href="<%= file %>"><%= file %></a>
-          </td>
-          <td>
-            <a class="edit-link" href="<%= file %>/edit">Edit</a>
-          </td>
-      <% end %>
-    </table>
-
-  </body>
-</html>
+<table class="file-edit">
+  <% @files.each do |file| %>
+    <tr>
+      <td>
+        <a class="file-link" href="<%= file %>"><%= file %></a>
+      </td>
+      <td>
+        <a class="edit-link" href="<%= file %>/edit">Edit</a>
+      </td>
+  <% end %>
+</table>

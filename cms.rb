@@ -39,7 +39,7 @@ get "/" do
     File.basename(path)
   end
   
-  erb :index
+  erb :index, layout: :layout
 end
 
 get "/:filename" do

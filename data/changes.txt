@@ -11,3 +11,9 @@ Methods
     Enumerable#tally
     Enumerator#produce
     Arrary#intersection
+
+
+
+
+
+
