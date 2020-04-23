@@ -14,13 +14,37 @@ body {
 body > header {
   max-width: 1000px;
   padding: 0.3em 0 0.4em 0;
+  display: inline-block;
 }
 
 body > header h1 {
-  display: inline-block;
+  
   width: 38%;
   font-size: 30px;
   color: #2b3945;
+}
+
+body > header a.add {
+  float: right;
+}
+
+body > header a.add:before {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin: 0 7px 0 0;
+  vertical-align: -6px;
+  content: "";
+  background: transparent url("../images/icon_add.png") 0 0 no-repeat;
+  -webkit-transition: transform 200ms linear;
+  -moz-transition: transform 200ms linear;
+  -o-transition: transform 200ms linear;
+}
+
+body > header a.add:hover:before {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
 }
 
 main {

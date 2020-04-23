@@ -12,6 +12,7 @@
   <body>
     <header>
       <h1>Content Management System</h1>
+      <%= yield_content :newdoclink %>
       <% if session[:message] %>
         <div class="flash-message">
           <p><%= session.delete(:message) %></p>
