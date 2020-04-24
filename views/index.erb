@@ -9,11 +9,23 @@
       <td>
         <a class="edit-link" href="<%= file %>/edit">Edit</a>
       </td>
+      <td>
+        <form class="inline delete" method="post" action="/<%= file %>/delete">
+          <button type="submit">delete</button>
+        </form>
+      </td>
+    </tr>
   <% end %>
 </table>
 
 <% content_for :newdoclink do %>
-  <div class="links">
-    <a class="add" href="/document/new">New Document</a>
-  </div>
+  <a class="add links" href="/new">New Document</a>
+<% end %>
+
+<% content_for :signedinas do %>
+  <h2 class="user-status">Signed in as <%= @username %>
+  <form class="inline logout" method="post" action="/users/signout">
+    <button type="submit">Sign Out</button>
+  </form>
+  </h2>
 <% end %>

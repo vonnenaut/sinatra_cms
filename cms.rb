@@ -1,4 +1,6 @@
 # cms.rb
+# Note:  To add support for new file extensions and rendering, an appropriate renderer method (akin to render_markdown) must be implemented, a case branch added to load_file_content which calls it and a branch created in in error_for_document_name to allow the new extension.
+
 require "sinatra"
 require "sinatra/reloader"
 require "sinatra/contrib"
@@ -10,6 +12,7 @@ configure do
   set :session_secret, 'secret'
 end
 
+# set path for files
 def data_path
   if ENV["RACK_ENV"] == "test"
     File.expand_path("../test/data", __FILE__)
@@ -47,13 +50,72 @@ def error_for_document_name(name)
     "A name is required."
   elsif get_filenames.include? name
     "File name already exists."
+  elsif !name.match(/(.txt$|.md$)/)
+    "File extension must be .txt or .md."
   end
 end
 
+# check if signed in; if so, list all files; if not, redirect to signin view
 get "/" do
-  @files = get_filenames
+  if session[:username]
+    @files = get_filenames
+    @username = session[:username]
   
-  erb :index, layout: :layout
+    erb :index, layout: :layout
+  else
+    redirect "/users/signin"
+  end
+end
+
+get "/users/signin" do
+
+  erb :signin, layout: :layout
+end
+
+post "/users/signin" do
+  if params[:username] == "admin" && params[:password] == "secret"
+    session[:username] = params[:username]
+    session[:message] = "Welcome, #{params[:username]}!"
+    redirect "/"
+  else
+    session[:message] = "Invalid Credentials"
+    status 422
+    erb :signin
+  end
+end
+
+post "/users/signout" do
+  session.delete(:username)
+  session[:message] = "You have been signed out."
+  redirect "/"
+end
+
+# show new document form
+get "/new" do
+
+  erb :new_document, layout: :layout
+end
+
+# Create a new, empty, named document
+post "/create" do
+  document_name = params[:document_name].to_s
+
+  # validate user input and handle any errors
+  error = error_for_document_name(document_name)
+
+  if error
+    session[:message] = error
+    status 422
+
+    erb :new_document, layout: :layout
+  else
+    # create new document with given name
+    path = File.join(data_path, params[:document_name])
+    File.write(path, "")
+    session[:message] ="#{params[:document_name]} was created."
+
+    redirect "/"
+  end 
 end
 
 # read a file
@@ -78,41 +140,23 @@ get "/:filename/edit" do
   erb :edit
 end
 
+# save changes to an edit of a file
 post "/:filename" do
   path = File.join(data_path, params[:filename])
 
   File.write(path, params[:content])
 
-  session[:message] = "#{params[:filename]} has been updated"
+  session[:message] = "#{params[:filename]} has been updated."
   redirect "/"
 end
 
-get "/document/new" do
+# delete a document
+post "/:filename/delete" do
+  path = File.join(data_path, params[:filename])
 
-  erb :new_document, layout: :layout
+  File.delete(path)
+
+  session[:message] = "#{params[:filename]} has been deleted."
+  redirect "/"
 end
 
-# Create a new, empty, named file
-post "/" do
-  # To-Do: Troubleshoot validation check failure: not catching empty or already-used filename
-  document_name = params[:document_name].strip
-
-  error = error_for_document_name(document_name)
-  puts "error: #{error}"
-
-  if error
-    session[:message] = error
-    erb :new_document, layout: :layout
-  else
-    # create new file with given name
-    filename = params[:document_name]
-    File.open("#{data_path}/#{filename}", "w+")
-    session[:message] ="#{params[:document_name]} was created."
-    redirect "/"
-  end
-
-  # refresh the list of files to be rendered at index.erb
-  @files = get_filenames
-
-  erb :index, layout: :layout
-end

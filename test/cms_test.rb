@@ -36,9 +36,9 @@ class CmsTest < Minitest::Test
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "about.md"
-    assert_includes last_response.body, "changes.txt"
-    assert_includes last_response.body, "history.txt"
+    assert_includes last_response.body.encode("UTF-8"), "about.md"
+    assert_includes last_response.body.encode("UTF-8"), "changes.txt"
+    assert_includes last_response.body.encode("UTF-8"), "history.txt"
   end
 
   def test_viewing_history_document
@@ -48,7 +48,7 @@ class CmsTest < Minitest::Test
 
     assert_equal 200, last_response.status
     assert_equal "text/plain", last_response["Content-Type"]
-    assert_includes last_response.body, "1993 - Yukihiro Matsumoto dreams up Ruby."
+    assert_includes last_response.body.encode("UTF-8"), "1993 - Yukihiro Matsumoto dreams up Ruby."
   end
 
   def test_viewing_markdown_document
@@ -58,7 +58,7 @@ class CmsTest < Minitest::Test
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "<h1>Ruby is...</h1>"
+    assert_includes last_response.body.encode("UTF-8"), "<h1>Ruby is...</h1>"
   end
 
   def test_not_found
@@ -73,11 +73,11 @@ class CmsTest < Minitest::Test
 
     # check page loaded correctly and displays error message
     assert_equal 200, last_response.status
-    assert_includes last_response.body, "doesnotexist.txt does not exist."
+    assert_includes last_response.body.encode("UTF-8"), "doesnotexist.txt does not exist."
 
     # check that error message disappears on reload of page
     get "/"
-    refute_includes last_response.body, "The specified file was not found."
+    refute_includes last_response.body.encode("UTF-8"), "The specified file was not found."
   end
 
   def test_editing_document
@@ -86,8 +86,8 @@ class CmsTest < Minitest::Test
     get "/changes.txt/edit"
 
     assert_equal 200, last_response.status
-    assert_includes last_response.body, "<textarea"
-    assert_includes last_response.body, %q(<button type="submit")
+    assert_includes last_response.body.encode("UTF-8"), "<textarea"
+    assert_includes last_response.body.encode("UTF-8"), %q(<button type="submit")
   end
 
   def test_updating_document
@@ -97,10 +97,57 @@ class CmsTest < Minitest::Test
 
     get last_response["location"]
 
-    assert_includes last_response.body, "changes.txt has been updated"
+    assert_includes last_response.body.encode("UTF-8"), "changes.txt has been updated."
 
     get "/changes.txt"
     assert_equal 200, last_response.status
-    assert_includes last_response.body, "new content"
-  end  
+    assert_includes last_response.body.encode("UTF-8"), "new content"
+  end
+
+  def test_view_new_document_form
+    get "/new"
+
+    assert_equal 200, last_response.status
+    assert_includes last_response.body.encode("UTF-8"), "<input"
+    assert_includes last_response.body.encode("UTF-8"), '<input type="submit"'
+  end
+
+  def test_create_new_document
+    post "/create", document_name: "test.txt"
+    assert_equal 302, last_response.status
+
+    get last_response["Location"]
+    assert_includes last_response.body.encode("UTF-8"), "test.txt was created."
+
+    get "/"
+    assert_includes last_response.body.encode("UTF-8"), "test.txt"
+  end
+
+  def test_creating_document_without_name
+    post "/create", document_name: ""
+    assert_equal 422, last_response.status
+    assert_includes last_response.body.encode("UTF-8"), "A name is required"
+  end
+
+  def test_validating_existing_document_name
+    create_document "test.txt"
+
+    post "/create", document_name: "test.txt"
+    assert_equal 422, last_response.status
+    assert_includes last_response.body.encode("UTF-8"), 'File name already exists.'
+  end
+
+  def test_deleting_documnet
+    create_document("test.txt")
+
+    post "/test.txt/delete"
+
+    assert_equal 302, last_response.status
+
+    get last_response["Location"]
+    assert_includes last_response.body, "test.txt has been deleted."
+
+    get "/"
+    refute_includes last_response.body, "test.txt"
+  end
 end

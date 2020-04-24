@@ -12,20 +12,23 @@ body {
 }
 
 body > header {
+  width: 90%;
   max-width: 1000px;
   padding: 0.3em 0 0.4em 0;
-  display: inline-block;
+  display: inline flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 
-body > header h1 {
-  
-  width: 38%;
-  font-size: 30px;
-  color: #2b3945;
+header.header-item {
+  max-width: 5%;
 }
 
-body > header a.add {
-  float: right;
+body > header h1.title {
+  color: black;
+  width: 12%;
+  font-size: 1.3em;
+  text-shadow: 1px 1px 2px black;
 }
 
 body > header a.add:before {
@@ -45,6 +48,10 @@ body > header a.add:hover:before {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+}
+
+form.inline {
+  display: inline;
 }
 
 main {
@@ -70,7 +77,14 @@ main > form {
 
 .flash-message {
   max-width: 960px;
+  min-width: 430px;
   padding: 10px 20px;
   color: #000000;
   background: #ffe8a3;
+}
+
+.user-status {
+  font-style: italic;
+  font-size: 0.9em;
+  margin-left: 2.5em;
 }

@@ -1,3 +1,5 @@
+<!-- views/layout.erb -->
+
 <!doctype html>
 <html lang="en-US">
   <head>
@@ -7,18 +9,21 @@
     <link rel="stylesheet" href="/stylesheets/whitespace-reset.css">
     <link rel="stylesheet" href="/stylesheets/application.css">
     <script src="/javascripts/jquery-3.5.0.js"></script>
-    <!-- <script src="/javascripts/application.js"></script> -->
+    <script src="/javascripts/application.js"></script>
   </head>
   <body>
     <header>
-      <h1>Content Management System</h1>
-      <%= yield_content :newdoclink %>
+      <div class="header-item"><h1 class="title">Content Management System</h1></div>
+      <div class="header-item"><%= yield_content :newdoclink %></div>
+      <div class="header-item"><%= yield_content :signedinas %></div>
+    </header>
+    <div class="flash">
       <% if session[:message] %>
         <div class="flash-message">
           <p><%= session.delete(:message) %></p>
         </div>
       <% end %>
-    </header>
+    </div>
 
     <main>
       <%= yield %>
