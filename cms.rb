@@ -75,7 +75,7 @@ end
 post "/users/signin" do
   if params[:username] == "admin" && params[:password] == "secret"
     session[:username] = params[:username]
-    session[:message] = "Welcome, #{params[:username]}!"
+    session[:message] = "Welcome, #{session[:username]}!"
     redirect "/"
   else
     session[:message] = "Invalid Credentials"
