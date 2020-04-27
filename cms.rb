@@ -1,6 +1,6 @@
 # cms.rb
 
-# A file-based content management system from Launch School's LS 175: Network Applications course which uses Ruby's Sinatra web library to provide CRUD functionality, ability to read and display text or markdown files, using redcarpet markdown parser, yaml to store user account information with passwords hashed via bcrypt and containing testing code using Minitest.
+# A file-based content management system from Launch School's RB175: Network Applications course which uses Ruby's Sinatra web library to provide CRUD functionality, ability to read and display text or markdown files, using redcarpet markdown parser, yaml to store user account information with passwords hashed via bcrypt and containing testing code using Minitest.
 
 # Note:  To add support for new file extensions and rendering, an appropriate renderer method (akin to render_markdown) must be implemented, a case branch added to load_file_content which calls it and a branch created in in error_for_filename to allow the new extension.
 
@@ -207,4 +207,15 @@ post "/:filename/delete" do
 
   session[:message] = "#{params[:filename]} has been deleted."
   redirect "/"
+end
+
+# mitigate vulnerability which allows viewing app's source code
+get "/view" do
+  file_path = File.join(data_path, File.basename(params[:filename]))
+  if File.exist?(file_path)
+    load_file_content(file_path)
+  else
+    session[:message] = "#{params[:filename]} does not exist."
+    redirect "/"
+  end
 end
