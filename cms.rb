@@ -1,5 +1,5 @@
 # cms.rb
-# Note:  To add support for new file extensions and rendering, an appropriate renderer method (akin to render_markdown) must be implemented, a case branch added to load_file_content which calls it and a branch created in in error_for_document_name to allow the new extension.
+# Note:  To add support for new file extensions and rendering, an appropriate renderer method (akin to render_markdown) must be implemented, a case branch added to load_file_content which calls it and a branch created in in error_for_filename to allow the new extension.
 
 require "sinatra"
 require "sinatra/reloader"
@@ -45,7 +45,7 @@ def get_filenames
   end
 end
 
-def error_for_document_name(name)
+def error_for_filename(name)
   if !(1..100).cover? name.size
     "A name is required."
   elsif get_filenames.include? name
@@ -56,13 +56,13 @@ def error_for_document_name(name)
 end
 
 def signed_in?
-  session[:username]
+  session.key?(:username)
 end
 
 def check_if_signed_in
-  if !signed_in?
+  unless signed_in?
     session[:message] = "You must be signed in to do that."
-    redirect "/signin"
+    redirect "/"
   end
 end
 
@@ -105,27 +105,27 @@ end
 get "/new" do
   check_if_signed_in
 
-  erb :new_document, layout: :layout
+  erb :new, layout: :layout
 end
 
 # Create a new, empty, named document
 post "/create" do
   check_if_signed_in
-  document_name = params[:document_name].to_s
+
+  filename = params[:filename].to_s
 
   # validate user input and handle any errors
-  error = error_for_document_name(document_name)
-
+  error = error_for_filename(filename)
   if error
     session[:message] = error
     status 422
 
-    erb :new_document, layout: :layout
+    erb :new, layout: :layout
   else
     # create new document with given name
-    path = File.join(data_path, params[:document_name])
+    path = File.join(data_path, filename)
     File.write(path, "")
-    session[:message] ="#{params[:document_name]} was created."
+    session[:message] ="#{params[:filename]} was created."
 
     redirect "/"
   end 
@@ -146,6 +146,7 @@ end
 # edit an existing file
 get "/:filename/edit" do
   check_if_signed_in
+
   path = File.join(data_path, params[:filename])
   
   @filename = params[:filename]
@@ -157,6 +158,7 @@ end
 # save changes to an edit of a file
 post "/:filename" do
   check_if_signed_in
+
   path = File.join(data_path, params[:filename])
 
   File.write(path, params[:content])
