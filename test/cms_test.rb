@@ -31,11 +31,23 @@ class CmsTest < Minitest::Test
     last_request.env["rack.session"]
   end
 
+  def sign_in_user
+    # submit sign-in form
+    post "/users/signin", username: "admin", password: "secret"
+
+    # verify user is signed in
+    assert_equal "admin", session[:username]
+  end
+
+  def admin_session
+    { "rack.session" => { username: "admin" } }
+  end
+
   def test_index_as_signed_in_user
     create_document "about.md"
     create_document "changes.txt"
 
-    get "/", {}, {"rack.session" => { username: "admin"} }
+    get "/", {}, admin_session
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -76,7 +88,7 @@ class CmsTest < Minitest::Test
   def test_editing_document
     create_document "changes.txt"
     
-    get "/changes.txt/edit"
+    get "/changes.txt/edit", {}, admin_session
 
     assert_equal 200, last_response.status
     assert_includes last_response.body, "<textarea"
@@ -166,7 +178,7 @@ class CmsTest < Minitest::Test
   end
 
   def test_signout
-    get "/", {}, {"rack.session" => { username: "admin" } }
+    get "/", {}, sign_in_user
     assert_includes last_response.body, "Signed in as admin"
 
     post "/users/signout"
@@ -174,7 +186,6 @@ class CmsTest < Minitest::Test
 
     get last_response["Location"]
     assert_nil session[:username]
-    get last_response["Location"]
     assert_includes last_response.body, 'Sign In'
   end
 end

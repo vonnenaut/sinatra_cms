@@ -55,9 +55,20 @@ def error_for_document_name(name)
   end
 end
 
+def signed_in?
+  session[:username]
+end
+
+def check_if_signed_in
+  if !signed_in?
+    session[:message] = "You must be signed in to do that."
+    redirect "/signin"
+  end
+end
+
 # check if signed in; if so, list all files; if not, redirect to signin view
 get "/" do
-  if session[:username]
+  if signed_in?
     @files = get_filenames
     @username = session[:username]
   
@@ -92,12 +103,14 @@ end
 
 # show new document form
 get "/new" do
+  check_if_signed_in
 
   erb :new_document, layout: :layout
 end
 
 # Create a new, empty, named document
 post "/create" do
+  check_if_signed_in
   document_name = params[:document_name].to_s
 
   # validate user input and handle any errors
@@ -132,6 +145,7 @@ end
 
 # edit an existing file
 get "/:filename/edit" do
+  check_if_signed_in
   path = File.join(data_path, params[:filename])
   
   @filename = params[:filename]
@@ -142,6 +156,7 @@ end
 
 # save changes to an edit of a file
 post "/:filename" do
+  check_if_signed_in
   path = File.join(data_path, params[:filename])
 
   File.write(path, params[:content])
@@ -152,6 +167,7 @@ end
 
 # delete a document
 post "/:filename/delete" do
+  check_if_signed_in
   path = File.join(data_path, params[:filename])
 
   File.delete(path)
