@@ -7,6 +7,7 @@ require "sinatra/contrib"
 require "tilt/erubis"
 require "redcarpet"
 require "yaml"
+require "bcrypt"
 
 configure do
   enable :sessions
@@ -76,16 +77,31 @@ def load_user_credentials
     YAML.load_file(credentials_path)
 end
 
+def valid_credentials?(username, password)
+  credentials = load_user_credentials
+
+  if credentials.key?(username)
+    bcrypt_password = BCrypt::Password.new(credentials[username])
+    bcrypt_password == password
+  else
+    false
+  end
+end
+
 # check if signed in; if so, list all files; if not, redirect to signin view
 get "/" do
-  if signed_in?
-    @files = get_filenames
-    @username = session[:username]
+  @files = get_filenames
+  @username = session[:username] if signed_in?
+
+  erb :index, layout: :layout
+  # if signed_in?
+  #   @files = get_filenames
+  #   @username = session[:username]
   
-    erb :index, layout: :layout
-  else
-    redirect "/users/signin"
-  end
+  #   erb :index, layout: :layout
+  # else
+  #   redirect "/users/signin"
+  # end
 end
 
 get "/users/signin" do
@@ -94,10 +110,9 @@ get "/users/signin" do
 end
 
 post "/users/signin" do
-  credentials = load_user_credentials
   username = params[:username]
 
-  if credentials.key?(username) && credentials[username] == params[:password]
+  if valid_credentials?(username, params[:password])
     session[:username] = username
     session[:message] = "Welcome!"
     redirect "/"

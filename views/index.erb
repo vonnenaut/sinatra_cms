@@ -22,10 +22,16 @@
   <a class="add links" href="/new">New Document</a>
 <% end %>
 
-<% content_for :signedinas do %>
-  <h2 class="user-status">Signed in as <%= @username %>
-  <form class="inline logout" method="post" action="/users/signout">
-    <button type="submit">Sign Out</button>
-  </form>
-  </h2>
+<% if session[:username] %>
+  <% content_for :signedinas do %>
+    <h2 class="user-status">Signed in as <%= @username %>
+    <form class="inline logout" method="post" action="/users/signout">
+      <button type="submit">Sign Out</button>
+    </form>
+    </h2>
+  <% end %>
+<% else %>
+  <% content_for :signin do %>
+    <div class="user-status"><a href="/users/signin">Sign In</a></div>  
+  <% end %>
 <% end %>
