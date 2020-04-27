@@ -1,8 +1,11 @@
 # cms.rb
+
+# A file-based content management system from Launch School's LS 175: Network Applications course which uses Ruby's Sinatra web library to provide CRUD functionality, ability to read and display text or markdown files, using redcarpet markdown parser, yaml to store user account information with passwords hashed via bcrypt and containing testing code using Minitest.
+
 # Note:  To add support for new file extensions and rendering, an appropriate renderer method (akin to render_markdown) must be implemented, a case branch added to load_file_content which calls it and a branch created in in error_for_filename to allow the new extension.
 
 require "sinatra"
-require "sinatra/reloader"
+require "sinatra/reloader" if development?
 require "sinatra/contrib"
 require "tilt/erubis"
 require "redcarpet"
