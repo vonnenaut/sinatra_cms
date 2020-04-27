@@ -9,6 +9,8 @@ require_relative "../cms"
 class CmsTest < Minitest::Test
   include Rack::Test::Methods
 
+  ## Begin helper methods ######################
+
   def app
     Sinatra::Application
   end
@@ -35,6 +37,8 @@ class CmsTest < Minitest::Test
     { "rack.session" => { username: "admin" } }
   end
 
+
+  ## Begin Tests ###############################
   def test_index_as_signed_in_user
     create_document "about.md"
     create_document "changes.txt"
@@ -199,7 +203,7 @@ class CmsTest < Minitest::Test
     post "/users/signin", username: "guest", password: "shhhh"
     assert_equal 422, last_response.status
     assert_nil session[:username]
-    assert_includes last_response.body, "Invalid Credentials"
+    assert_includes last_response.body, "Invalid credentials"
   end
 
   def test_signout

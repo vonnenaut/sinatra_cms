@@ -1,0 +1,4 @@
+# test/users.yaml
+{
+  admin: secret
+}
