@@ -14,7 +14,7 @@ require "bcrypt"
 
 configure do
   enable :sessions
-  set :session_secret, 'secret'
+  set :session_secret, ENV.fetch('SESSION_SECRET') { SecureRandom.hex(20) }
 end
 
 # set path for files
