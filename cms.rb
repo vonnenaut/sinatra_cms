@@ -97,14 +97,6 @@ get "/" do
   @username = session[:username] if signed_in?
 
   erb :index, layout: :layout
-  # if signed_in?
-  #   @files = get_filenames
-  #   @username = session[:username]
-  
-  #   erb :index, layout: :layout
-  # else
-  #   redirect "/users/signin"
-  # end
 end
 
 get "/users/signin" do
