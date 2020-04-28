@@ -1,12 +1,16 @@
 # cms.rb
+
+# A file-based content management system from Launch School's RB175: Network Applications course which uses Ruby's Sinatra web library to provide CRUD functionality, ability to read and display text or markdown files, using redcarpet markdown parser, yaml to store user account information with passwords hashed via bcrypt and containing testing code using Minitest.
+
 # Note:  To add support for new file extensions and rendering, an appropriate renderer method (akin to render_markdown) must be implemented, a case branch added to load_file_content which calls it and a branch created in in error_for_filename to allow the new extension.
 
 require "sinatra"
-require "sinatra/reloader"
+require "sinatra/reloader" if development?
 require "sinatra/contrib"
 require "tilt/erubis"
 require "redcarpet"
 require "yaml"
+require "bcrypt"
 
 configure do
   enable :sessions
@@ -76,16 +80,31 @@ def load_user_credentials
     YAML.load_file(credentials_path)
 end
 
+def valid_credentials?(username, password)
+  credentials = load_user_credentials
+
+  if credentials.key?(username)
+    bcrypt_password = BCrypt::Password.new(credentials[username])
+    bcrypt_password == password
+  else
+    false
+  end
+end
+
 # check if signed in; if so, list all files; if not, redirect to signin view
 get "/" do
-  if signed_in?
-    @files = get_filenames
-    @username = session[:username]
+  @files = get_filenames
+  @username = session[:username] if signed_in?
+
+  erb :index, layout: :layout
+  # if signed_in?
+  #   @files = get_filenames
+  #   @username = session[:username]
   
-    erb :index, layout: :layout
-  else
-    redirect "/users/signin"
-  end
+  #   erb :index, layout: :layout
+  # else
+  #   redirect "/users/signin"
+  # end
 end
 
 get "/users/signin" do
@@ -94,10 +113,9 @@ get "/users/signin" do
 end
 
 post "/users/signin" do
-  credentials = load_user_credentials
   username = params[:username]
 
-  if credentials.key?(username) && credentials[username] == params[:password]
+  if valid_credentials?(username, params[:password])
     session[:username] = username
     session[:message] = "Welcome!"
     redirect "/"
@@ -189,4 +207,15 @@ post "/:filename/delete" do
 
   session[:message] = "#{params[:filename]} has been deleted."
   redirect "/"
+end
+
+# mitigate vulnerability which allows viewing app's source code
+get "/view" do
+  file_path = File.join(data_path, File.basename(params[:filename]))
+  if File.exist?(file_path)
+    load_file_content(file_path)
+  else
+    session[:message] = "#{params[:filename]} does not exist."
+    redirect "/"
+  end
 end

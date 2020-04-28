@@ -1,3 +1,4 @@
 # users.yml
 ---
-developer: letmein
+developer: $2a$12$1TpCvBvUzPhdCrtAXlRAR.kt6YdJWCMD3MzVIT.KE1fdjgt1JLDuy
+admin: $2a$12$Cnxwzcxn6iMxtAuVdnBZJeILdd4S5FF3l0Yxst4hh8dWOXX/W08M2

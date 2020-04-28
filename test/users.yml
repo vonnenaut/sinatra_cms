@@ -1,4 +1,4 @@
 # test/users.yaml
 {
-  admin: secret
+  admin: $2a$12$Ani6v8/sMb7Tehpr4Umrdemg2r3d1ofc54jaFx8Orvu7.EwV1h2Z2
 }
