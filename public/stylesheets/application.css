@@ -89,3 +89,21 @@ main > form {
   font-size: 0.9em;
   margin-left: 2.5em;
 }
+
+/*BEGIN MEDIA QUERIES */
+@media screen and (max-width: 770px) {
+  header {
+    width: 90%;
+    font-size: 20px;
+  }
+
+  .flash {
+    font-size: 28px;
+  }
+}
+
+/*@media screen and (max-width: 260px) {
+  
+}*/
+
+/* END OF FILE:  application.css  */
