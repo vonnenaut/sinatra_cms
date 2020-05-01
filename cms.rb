@@ -213,43 +213,25 @@ get "/view" do
 end
 
 # duplicate an existing file (copy its contents to a new file called 'filename_duplicate')
-# get "/:filename/duplicate"
-#   check_if_signed_in
+get "/:filename/duplicate" do
+  check_if_signed_in
+  string = ""
+  old_filename = File.basename(params[:filename])
+  new_filename = old_filename.gsub(/\./, "_dup.")
+  old_path = File.join(data_path, old_filename)
+  new_path = File.join(data_path, new_filename)
 
-#   filename = params[:filename].to_s
- 
+  if File.exist?(old_path)
+    # load existing file and create new file with its contents
+    contents = load_file_content(old_path)
+    File.write(new_path, contents)
 
-#   file_path = File.join(data_path, File.basename(params[:filename]))
-#   if File.exist?(file_path)
-#     load_file_content(file_path)
-#   else
-#     session[:message] = "#{params[:filename]} does not exist."
-#     redirect "/"
-#   end
-# end
+    string = "was duplicated."
+  else
+    string = "does not exist."
+  end
+  
+  session[:message] = "#{params[:filename]} " + string
 
-# Create a new, empty, named document
-# post "/create" do
-#   check_if_signed_in
-
-#   filename = params[:filename].to_s
-
-#   # validate user input and handle any errors
-#   error = error_for_filename(filename)
-#   if error
-#     session[:message] = error
-#     status 422
-
-#     erb :new, layout: :layout
-#   else
-#     # create new document with given name
-#     path = File.join(data_path, filename)
-#     File.write(path, "")
-#     session[:message] ="#{params[:filename]} was created."
-
-#     redirect "/"
-#   end 
-# end
-
-#Duplicate Steps:
-# create a new file and load edit page, inserting content of existing file into it
+  redirect "/"
+end
