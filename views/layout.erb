@@ -12,11 +12,13 @@
   </head>
   <body>
 
+    <div class="wrapper">
+
       <header>
-        <div class="header-item"><h1 class="title">Content Management System</h1></div>
-        <div class="header-item"><%= yield_content :newdoclink %></div>
-        <div class="header-item"><%= yield_content :signedinas %>
-        <div class="header-item"><%= yield_content :signin %>
+        <div class="title"><h1 class="title">Content Management System</h1></div>
+        <div class="new"><%= yield_content :newdoclink %></div>
+        <div class="status"><%= yield_content :signedinas %></div>
+        <div class="status"><%= yield_content :signin %></div>
       </header>
 
       <div class="flash">
@@ -31,5 +33,6 @@
         <%= yield %>
       </main>
 
+    </div>
   </body>
 </html>

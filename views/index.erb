@@ -25,11 +25,11 @@
 
 <% if session[:username] %>
   <% content_for :signedinas do %>
-    <h2 class="user-status">Signed in as <%= @username %>
+    <h3 class="user-status">Signed in as <%= @username %>
     <form class="inline logout" method="post" action="/users/signout">
       <button type="submit">Sign Out</button>
     </form>
-    </h2>
+    </h3>
   <% end %>
 <% else %>
   <% content_for :signin do %>

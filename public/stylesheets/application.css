@@ -11,25 +11,54 @@ body {
   margin: 0 auto;
 }
 
+body > div.wrapper {
+  width: 80%;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%; 
+  grid-template-rows: 20% 10% auto;
+  grid-template-areas: "title new status"
+                       "flash flash flash"
+                       "content content content";
+}
+
+body > header h1.title {
+  grid-area: title;
+  background-color: white;
+  color: black;
+  max-width: 10%;
+  font-size: 1.1em;
+  text-shadow: 1px 1px 2px black;
+  padding: 0;
+}
+
+body > div.flash {
+  grid-area: flash;
+}
+
+body > div.new {
+  grid-area: new;
+  background-color: green;
+}
+
+body > div.status {
+  grid-area: status;
+  background-color: orange;
+}
+
 body > header {
-  width: 90%;
+  width: 85%;
   max-width: 1000px;
   padding: 0.3em 0 0.4em 0;
   display: inline flex;
 }
 
 header.header-item {
-  max-width: 15%;
   padding: 0;
   margin: 0;
 }
 
-body > header h1.title {
-  color: black;
-  max-width: 10%;
-  font-size: 1.3em;
-  text-shadow: 1px 1px 2px black;
-  padding: 0;
+body > header h3.user-status {
+  font-size: 0.8em;
 }
 
 body > header a.add:before {
@@ -72,7 +101,7 @@ main > form {
   font-size: 1.2em;
 }
 
-.edit-link {
+.edit-link, .duplicate-link {
   font-size: 0.8em;
 }
 
@@ -82,6 +111,10 @@ main > form {
   padding: 10px 20px;
   color: #000000;
   background: #ffe8a3;
+}
+
+.links {
+  font-size: 0.9em;
 }
 
 .user-status {

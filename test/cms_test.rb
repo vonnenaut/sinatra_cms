@@ -215,7 +215,6 @@ class CmsTest < Minitest::Test
 
     get last_response["Location"]
     assert_nil session[:username]
-    get last_response["Location"]
-    assert_includes last_response.body, "Username"
+    assert_includes last_response.body, "Sign In"
   end
 end
