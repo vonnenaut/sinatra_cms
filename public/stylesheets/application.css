@@ -12,17 +12,12 @@ body {
 }
 
 body > div.wrapper {
-  width: 80%;
-  display: grid;
-  grid-template-columns: 25% 25% 25% 25%; 
-  grid-template-rows: 20% 10% auto;
-  grid-template-areas: "title new status"
-                       "flash flash flash"
-                       "content content content";
+  width: 95%;
+  display: flex;
+  flex-direction: column;
 }
 
 body > header h1.title {
-  grid-area: title;
   background-color: white;
   color: black;
   max-width: 10%;
@@ -31,17 +26,11 @@ body > header h1.title {
   padding: 0;
 }
 
-body > div.flash {
-  grid-area: flash;
-}
-
 body > div.new {
-  grid-area: new;
   background-color: green;
 }
 
 body > div.status {
-  grid-area: status;
   background-color: orange;
 }
 
@@ -86,7 +75,7 @@ form.inline {
 
 main {
   max-width: 1000px;
-  padding: 4em 0 0.5em 0;
+  padding: 1em 0 0.5em 0;
 }
 
 main > form {
@@ -98,17 +87,18 @@ main > form {
 }
 
 .file-link {
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 
 .edit-link, .duplicate-link {
-  font-size: 0.8em;
+  font-size: 1.0em;
 }
 
 .flash-message {
+  font-size: 0.6em;
   max-width: 960px;
-  min-width: 430px;
-  padding: 10px 20px;
+  min-width: 200px;
+  padding: 5px 10px;
   color: #000000;
   background: #ffe8a3;
 }
@@ -135,4 +125,23 @@ main > form {
   }
 }
 
+@media screen and (max-width: 420px) {
+  .file-link {
+    font-size: 0.7em;
+  }
+
+  .edit-link, .duplicate-link {
+    font-size: 0.6em;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .file-link {
+    font-size: 0.7em;
+  }
+
+  .edit-link, .duplicate-link {
+    font-size: 0.6em;
+  }
+}
 /* END OF FILE:  application.css  */
